@@ -1,0 +1,14 @@
+
+{
+  "name": "bingchat_keybindings",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Keybindings for bingchat",
+  "permissions": ["activeTab"],
+  "background": {
+    "service_worker": "bingchat_keybindings.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

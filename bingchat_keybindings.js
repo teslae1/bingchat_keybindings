@@ -8,7 +8,50 @@ document.addEventListener('keydown', function(event) {
         tryFlashBackgroundOfMessageToCopy(cibMessage);
         copyMessageToClipboard(cibMessage);
     }
+    else if(event.key == 'Escape'){
+        var search = findSearchBar();
+        if(search == null)
+            return;
+
+        search.blur();
+    }
+    else if(event.ctrlKey && event.key == 'i'){
+
+        var mainContainer = findMainContainer();
+        var search = findSearchBar();
+        if(search == null)
+            return;
+
+        search.focus();
+    }
 });
+
+function findSearchBar(){
+    let mainContainer = findMainContainer();
+    let inputcontainer = Array.from(mainContainer.children)
+    .find(x => x.className == 'input-container');
+    let searchboxform = Array.from(inputcontainer.children)
+    .find(x => x.id == 'searchboxform');
+    let label = Array.from(searchboxform.children)
+    .find(x => x.tagName == 'LABEL');
+    let textarea = Array.from(label.children)
+    .find(x => x.tagName == 'TEXTAREA');
+    return textarea;
+}
+
+function findMainContainer(){
+   let cibserpChildren = document
+       .getElementsByTagName('cib-serp')[0]
+       .shadowRoot
+       .children;
+    let actionBar = Array.from(cibserpChildren)
+    .find(x => x.tagName == 'CIB-ACTION-BAR');
+    let actionBarChildren = actionBar.shadowRoot.children;
+    let root = Array.from(actionBarChildren)
+    .find(x => x.className == 'root');
+    return Array.from(root.children)
+    .find(x => x.className == 'main-container');
+}
 
 function tryFindCibMessage(){
    let cibserpChildren = document
@@ -57,7 +100,6 @@ function copyMessageToClipboard(cibMessage)
    let feedbackcontainer = cibFeedback.shadowRoot.children[0];
    let moreBtn = Array.from(feedbackcontainer.children)
    .find(e => e.className == 'more');
-   //dispatch mouse click event 
    moreBtn.dispatchEvent(new MouseEvent('click', {
        view: window,
        bubbles: true,
