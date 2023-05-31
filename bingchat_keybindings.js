@@ -16,15 +16,31 @@ document.addEventListener('keydown', function(event) {
         search.blur();
     }
     else if(event.ctrlKey && event.key == 'i'){
-
-        var mainContainer = findMainContainer();
         var search = findSearchBar();
         if(search == null)
             return;
 
         search.focus();
     }
+
+    else if(event.ctrlKey && event.key == 'c'){
+        NewTopic();
+    }
 });
+
+function NewTopic(){
+
+   var root = findActionBarRoot();
+    if(root == null)
+       return;
+
+    let btnContainer = Array.from(root.children)
+    .find(x => x.className == 'outside-left-container');
+    console.log(btnContainer.children);
+    let btnWrapper = btnContainer.children[0];
+    let btn = btnWrapper.children[0];
+    btn.click();
+}
 
 function findSearchBar(){
     let mainContainer = findMainContainer();
@@ -40,6 +56,12 @@ function findSearchBar(){
 }
 
 function findMainContainer(){
+    var root = findActionBarRoot();
+    return Array.from(root.children)
+    .find(x => x.className == 'main-container');
+}
+
+function findActionBarRoot(){
    let cibserpChildren = document
        .getElementsByTagName('cib-serp')[0]
        .shadowRoot
@@ -47,10 +69,8 @@ function findMainContainer(){
     let actionBar = Array.from(cibserpChildren)
     .find(x => x.tagName == 'CIB-ACTION-BAR');
     let actionBarChildren = actionBar.shadowRoot.children;
-    let root = Array.from(actionBarChildren)
+    return Array.from(actionBarChildren)
     .find(x => x.className == 'root');
-    return Array.from(root.children)
-    .find(x => x.className == 'main-container');
 }
 
 function tryFindCibMessage(){
